@@ -1,0 +1,12 @@
+version: '3'
+services:
+   mylinux:
+      build:
+         context: .
+         dockerfile: mycent
+      restart: always
+      ports:
+         - "3222:22"
+      hostname: rafael
+      volumes:
+         - /:/hostmashineSlash

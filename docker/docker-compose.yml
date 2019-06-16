@@ -1,0 +1,103 @@
+version: '3'
+services:
+   nginx-proxy:
+      image: jwilder/nginx-proxy
+      restart: always
+      ports:
+         - 8888:80
+         - 4444:443
+      volumes:
+         - /var/run/docker.sock:/tmp/docker.sock:ro
+
+   zoo1:
+      image: zookeeper
+      restart: always
+      hostname: zoo1
+      #ports:
+      #   - 2181:2181
+      environment:
+         ZOO_MY_ID: 1
+         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+         VIRTUAL_HOST: zoo1.localhost
+
+   zoo2:
+      image: zookeeper
+      restart: always
+      hostname: zoo2
+      #ports:
+      #   - 2182:2181
+      environment:
+         ZOO_MY_ID: 2
+         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+         VIRTUAL_HOST: zoo2.localhost
+
+   zoo3:
+      image: zookeeper
+      restart: always
+      hostname: zoo3
+      #ports:
+      #   - 2183:2181
+      environment:
+         ZOO_MY_ID: 3
+         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+         VIRTUAL_HOST: zoo3.localhost
+
+   solr1:
+      image: solr
+      #ports:
+      #   - 4001:8983
+      environment:
+         ZK_HOST: zoo1:2181,zoo2:2181,zoo3:2181
+         VIRTUAL_HOST: solr01.localhost
+
+   solr2:
+      image: solr
+      #ports:
+      #   - 4002:8983
+      environment:
+         ZK_HOST: zoo1:2181,zoo2:2181,zoo3:2181
+         VIRTUAL_HOST: solr02.localhost
+   solr3:
+      image: solr
+      #ports:
+      #   - 4003:8983
+      environment:
+         ZK_HOST: zoo1:2181,zoo2:2181,zoo3:2181
+         VIRTUAL_HOST: solr03.localhost
+   solr4:
+      image: solr
+      #ports:
+      #   - 4004:8983
+      environment:
+         ZK_HOST: zoo1:2181,zoo2:2181,zoo3:2181
+         VIRTUAL_HOST: solr04.localhost
+   solr5:
+      image: solr
+      #ports:
+      #   - 4005:8983
+      environment:
+         ZK_HOST: zoo1:2181,zoo2:2181,zoo3:2181
+         VIRTUAL_HOST: solr05.localhost
+   wiki:
+      image: mediawiki
+      hostname: wiki
+      environment:
+         VIRTUAL_HOST: wiki.localhost
+   mariaDB:
+      image: mariadb
+      hostname: mariaDB
+      environment:
+         VIRTUAL_HOST: mariadb.localhost
+         MYSQL_ROOT_PASSWORD: ROOTPW
+         MYSQL_USER: test
+         MYSQL_PASSWORD: TESTPW
+         MYSQL_DATABASE: testdb
+   tomcat:
+      image: tomcat
+      environment:
+         VIRTUAL_HOST: tomcat.localhost
+   
+
+
+
+
